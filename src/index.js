@@ -32,7 +32,7 @@ try {
       console.log(`Thank you for using File Manager, ${userName}!`);
       exit();
     }
-    console.log(`Current directory: ${cwd()}`);
+    console.log(`You are currently in ${cwd()}`);
   });
 
   rl.on('SIGINT', () => {
