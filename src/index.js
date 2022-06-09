@@ -3,6 +3,7 @@ import { stdin, stdout, exit } from 'process';
 import { homedir } from 'os';
 import * as readline from 'node:readline';
 import { up } from "./navigation/up.js";
+import { ls } from "./navigation/ls.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -29,16 +30,20 @@ try {
     output: stdout
   });
 
-  rl.on('line', (data) => {
+  rl.on('line', async (data) => {
     const command = data.toString().trim();
 
     switch (command) {
       case '.exit': {
-        console.log(`Thank you for using File Manager, ${userName}!`);
+        stdout.write(`Thank you for using File Manager, ${userName}!`);
         exit();
       } break;
       case 'up': {
         currentDirectory = up(currentDirectory);
+      } break;
+      case 'ls': {
+        const list = await ls(currentDirectory);
+        console.log(list);
       } break;
     }
     stdout.write(`You are currently in ${currentDirectory} \nPlease enter command \n`);
