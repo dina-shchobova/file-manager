@@ -1,9 +1,11 @@
 import { argv } from 'process';
 import { stdin, stdout, exit } from 'process';
-import { cwd } from 'process';
+import { homedir } from 'os';
 import * as readline from 'node:readline';
+import { up } from "./navigation/up.js";
 
 let userName = null;
+let currentDirectory = homedir();
 
 export const getUserName = () => {
   const nameVariable = '--username=';
@@ -20,7 +22,7 @@ export const getUserName = () => {
 try {
   userName = getUserName();
 
-  stdout.write(`Welcome to the File Manager, ${userName}! \n`);
+  stdout.write(`Welcome to the File Manager, ${userName}! \nPlease enter command \n`);
 
   const rl = readline.createInterface({
     input: stdin,
@@ -28,18 +30,25 @@ try {
   });
 
   rl.on('line', (data) => {
-    if (data.toString().trim() === '.exit') {
-      console.log(`Thank you for using File Manager, ${userName}!`);
-      exit();
+    const command = data.toString().trim();
+
+    switch (command) {
+      case '.exit': {
+        console.log(`Thank you for using File Manager, ${userName}!`);
+        exit();
+      } break;
+      case 'up': {
+        currentDirectory = up(currentDirectory);
+      } break;
     }
-    console.log(`You are currently in ${cwd()}`);
+    stdout.write(`You are currently in ${currentDirectory} \nPlease enter command \n`);
   });
 
   rl.on('SIGINT', () => {
-    console.log(`Thank you for using File Manager, ${userName}!`);
+    stdout.write(`Thank you for using File Manager, ${userName}!`);
     exit();
   });
 
 } catch {
-  console.error(`Please, enter '--username='`);
+  console.error(`Something went wrong`);
 }
