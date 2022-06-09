@@ -4,6 +4,7 @@ import { homedir } from 'os';
 import * as readline from 'node:readline';
 import { up } from "./navigation/up.js";
 import { ls } from "./navigation/ls.js";
+import { cd } from "./navigation/cd.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -23,7 +24,7 @@ export const getUserName = () => {
 try {
   userName = getUserName();
 
-  stdout.write(`Welcome to the File Manager, ${userName}! \nPlease enter command \n`);
+  stdout.write(`Welcome to the File Manager, ${userName}! \n\nPlease enter command: \n`);
 
   const rl = readline.createInterface({
     input: stdin,
@@ -31,7 +32,9 @@ try {
   });
 
   rl.on('line', async (data) => {
-    const command = data.toString().trim();
+    const dataArr = data.toString().trim().split(' ');
+    const command = dataArr[0];
+    const args = dataArr.slice(1);
 
     switch (command) {
       case '.exit': {
@@ -45,8 +48,12 @@ try {
         const list = await ls(currentDirectory);
         console.log(list);
       } break;
+      case 'cd': {
+        const verifiedPath = await cd(args, currentDirectory);
+        currentDirectory = verifiedPath ? verifiedPath : currentDirectory;
+      } break;
     }
-    stdout.write(`You are currently in ${currentDirectory} \nPlease enter command \n`);
+    stdout.write(`You are currently in ${currentDirectory} \n\nPlease enter your command: \n`);
   });
 
   rl.on('SIGINT', () => {
