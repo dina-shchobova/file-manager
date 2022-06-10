@@ -5,6 +5,8 @@ import * as readline from 'node:readline';
 import { up } from "./navigation/up.js";
 import { ls } from "./navigation/ls.js";
 import { cd } from "./navigation/cd.js";
+import { cat } from "./fs/cat.js";
+import { add } from "./fs/add.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -15,52 +17,74 @@ export const getUserName = () => {
 
   if (variable && variable.length > nameVariable.length) {
     return variable.slice(nameVariable.length);
-  }
-  else {
+  } else {
     throw new Error();
   }
 };
 
-try {
-  userName = getUserName();
 
-  stdout.write(`Welcome to the File Manager, ${userName}! \n\nPlease enter command: \n`);
+userName = getUserName();
 
-  const rl = readline.createInterface({
-    input: stdin,
-    output: stdout
-  });
+stdout.write(`Welcome to the File Manager, ${userName}! \nPlease enter command: \n\n`);
 
-  rl.on('line', async (data) => {
-    const dataArr = data.toString().trim().split(' ');
-    const command = dataArr[0];
-    const args = dataArr.slice(1);
+const rl = readline.createInterface({
+  input: stdin,
+  output: stdout
+});
 
+rl.on('line', async (data) => {
+  const dataArr = data.toString().trim().split(' ');
+  const command = dataArr[0];
+  const args = dataArr.slice(1);
+  try {
     switch (command) {
       case '.exit': {
         stdout.write(`Thank you for using File Manager, ${userName}!`);
         exit();
-      } break;
+      }
+        break;
       case 'up': {
         currentDirectory = up(currentDirectory);
-      } break;
+      }
+        break;
       case 'ls': {
         const list = await ls(currentDirectory);
         console.log(list);
-      } break;
+      }
+        break;
       case 'cd': {
         const verifiedPath = await cd(args, currentDirectory);
         currentDirectory = verifiedPath ? verifiedPath : currentDirectory;
-      } break;
+      }
+        break;
+      case 'cat': {
+        const data = await cat(args);
+        stdout.write(data);
+      }
+        break;
+      case 'add': {
+        const data = await add(args, currentDirectory);
+        stdout.write(data);
+      }
+        break;
     }
-    stdout.write(`You are currently in ${currentDirectory} \n\nPlease enter your command: \n`);
-  });
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      stdout.write('\nInvalid input \n');
+    }
+    else if (e.code === 'EEXIST') {
+      stdout.write('\nInvalid input. File already exists \n');
+    }
+    else {
+      stdout.write('\nOperation failed \n', e.message);
+    }
+  }
 
-  rl.on('SIGINT', () => {
-    stdout.write(`Thank you for using File Manager, ${userName}!`);
-    exit();
-  });
+  stdout.write(`\nYou are currently in ${currentDirectory} \nPlease enter your command: \n\n`);
+});
 
-} catch {
-  console.error(`Something went wrong`);
-}
+rl.on('SIGINT', () => {
+  stdout.write(`\nThank you for using File Manager, ${userName}!`);
+  exit();
+});
+
