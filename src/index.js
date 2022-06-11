@@ -9,6 +9,7 @@ import { cat } from "./fs/cat.js";
 import { add } from "./fs/add.js";
 import { rn } from "./fs/rn.js";
 import { cp } from "./fs/cp.js";
+import { rm } from "./fs/rm.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -75,15 +76,9 @@ rl.on('line', async (data) => {
         break;
       }
 
-      case 'rn': {
-        await rn(args);
-        break;
-      }
-
-      case 'cp': {
-        await cp(args);
-        break;
-      }
+      case 'rn': await rn(args); break;
+      case 'cp': await cp(args); break;
+      case 'rm': await rm(args, currentDirectory); break;
     }
   } catch (e) {
     if (e.code === 'ENOENT') {
