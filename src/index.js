@@ -7,6 +7,7 @@ import { ls } from "./navigation/ls.js";
 import { cd } from "./navigation/cd.js";
 import { cat } from "./fs/cat.js";
 import { add } from "./fs/add.js";
+import { rn } from "./fs/rn.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -41,32 +42,43 @@ rl.on('line', async (data) => {
       case '.exit': {
         stdout.write(`Thank you for using File Manager, ${userName}!`);
         exit();
-      }
         break;
+      }
+
       case 'up': {
         currentDirectory = up(currentDirectory);
-      }
         break;
+      }
+
       case 'ls': {
         const list = await ls(currentDirectory);
         console.log(list);
-      }
         break;
+      }
+
       case 'cd': {
         const verifiedPath = await cd(args, currentDirectory);
         currentDirectory = verifiedPath ? verifiedPath : currentDirectory;
-      }
         break;
+      }
+
       case 'cat': {
         const data = await cat(args);
         stdout.write(data);
-      }
         break;
+      }
+
       case 'add': {
         const data = await add(args, currentDirectory);
         stdout.write(data);
-      }
         break;
+      }
+
+      case 'rn': {
+        await rn(args);
+        break;
+      }
+
     }
   } catch (e) {
     if (e.code === 'ENOENT') {
