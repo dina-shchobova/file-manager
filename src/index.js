@@ -13,6 +13,7 @@ import { rm } from "./fs/rm.js";
 import { mv } from "./fs/mv.js";
 import { os } from "./os/os.js";
 import { getHash } from "./hash/hash.js";
+import { compress } from "./zlib/compress.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -96,17 +97,23 @@ rl.on('line', async (data) => {
       }
 
       case 'os': os(args); break;
-
       case 'hash': await getHash(args); break;
+      case 'compress': await compress(args); break;
 
       default: throw new Error();
     }
   } catch (e) {
     if (e.code === 'ENOENT') {
-      stdout.write('\nOperation failed \n');
+      stdout.write('\nOperation failed. Such file or folder does not exist \n');
     }
     else if (e.code === 'EEXIST') {
       stdout.write('\nOperation failed. File already exists \n');
+    }
+    else if (e.message === 'File already exists') {
+      stdout.write('\nOperation failed. File already exists \n');
+    }
+    else if (e.message === 'Incorrect command parameters') {
+      stdout.write('\nOperation failed. Incorrect command parameters \n');
     }
     else {
       stdout.write('\nInvalid input \n', e.message);
