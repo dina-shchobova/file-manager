@@ -11,6 +11,7 @@ import { rn } from "./fs/rn.js";
 import { cp } from "./fs/cp.js";
 import { rm } from "./fs/rm.js";
 import { mv } from "./fs/mv.js";
+import { os } from "./os/os.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -85,21 +86,29 @@ rl.on('line', async (data) => {
         stdout.write('File has been deleted\n');
         break;
       }
+
       case 'mv': {
         await mv(args);
         stdout.write('File has been moved');
         break;
       }
+
+      case 'os': {
+        os(args);
+        break;
+      }
+
+      default: throw new Error();
     }
   } catch (e) {
     if (e.code === 'ENOENT') {
-      stdout.write('\nInvalid input \n');
+      stdout.write('\nOperation failed \n');
     }
     else if (e.code === 'EEXIST') {
-      stdout.write('\nInvalid input. File already exists \n');
+      stdout.write('\nOperation failed. File already exists \n');
     }
     else {
-      stdout.write('\nOperation failed \n', e.message);
+      stdout.write('\nInvalid input \n', e.message);
     }
   }
 
