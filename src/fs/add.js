@@ -5,15 +5,15 @@ export const add = (args, currentDirectory) => {
   return new Promise((resolve, reject) => {
     let inputName = args.join(' ');
     const newFilePath = path.join(currentDirectory, `${inputName}`);
-    const readStream = createWriteStream(newFilePath, {flags: 'wx'});
+    const writeStream = createWriteStream(newFilePath, {flags: 'wx'});
 
-    const text = 'File created';
+    const text = 'File created \n';
 
-    readStream.on('error', (e) => {
+    writeStream.on('error', (e) => {
       reject(e);
     });
-    readStream.end();
-    readStream.on('close', () => {
+    writeStream.end();
+    writeStream.on('close', () => {
       resolve(text);
     });
 
