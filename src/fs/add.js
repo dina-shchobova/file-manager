@@ -1,4 +1,4 @@
-import {createReadStream, createWriteStream} from 'fs';
+import { createWriteStream } from 'fs';
 import path from 'path';
 
 export const add = (args, currentDirectory) => {
