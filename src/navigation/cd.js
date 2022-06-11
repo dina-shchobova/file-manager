@@ -6,10 +6,10 @@ export const cd = async (args, currentDirectory) => {
   if (!isAbsolute(inputPath)) {
     inputPath = join(currentDirectory, inputPath);
   }
-  try{
+  try {
     await access(inputPath);
     return inputPath;
-  } catch {
-    console.error('\nInvalid input');
+  } catch(e) {
+    throw (e);
   }
 }
