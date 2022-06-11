@@ -12,6 +12,7 @@ import { cp } from "./fs/cp.js";
 import { rm } from "./fs/rm.js";
 import { mv } from "./fs/mv.js";
 import { os } from "./os/os.js";
+import { getHash } from "./hash/hash.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -80,6 +81,7 @@ rl.on('line', async (data) => {
 
       case 'rn': await rn(args); break;
       case 'cp': await cp(args); break;
+
       case 'rm': {
         const pathToFile = args.join('');
         await rm(pathToFile, currentDirectory);
@@ -93,10 +95,9 @@ rl.on('line', async (data) => {
         break;
       }
 
-      case 'os': {
-        os(args);
-        break;
-      }
+      case 'os': os(args); break;
+
+      case 'hash': await getHash(args); break;
 
       default: throw new Error();
     }
