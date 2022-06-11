@@ -8,6 +8,7 @@ import { cd } from "./navigation/cd.js";
 import { cat } from "./fs/cat.js";
 import { add } from "./fs/add.js";
 import { rn } from "./fs/rn.js";
+import { cp } from "./fs/cp.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -79,6 +80,10 @@ rl.on('line', async (data) => {
         break;
       }
 
+      case 'cp': {
+        await cp(args);
+        break;
+      }
     }
   } catch (e) {
     if (e.code === 'ENOENT') {
