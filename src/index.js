@@ -10,6 +10,7 @@ import { add } from "./fs/add.js";
 import { rn } from "./fs/rn.js";
 import { cp } from "./fs/cp.js";
 import { rm } from "./fs/rm.js";
+import { mv } from "./fs/mv.js";
 
 let userName = null;
 let currentDirectory = homedir();
@@ -78,7 +79,17 @@ rl.on('line', async (data) => {
 
       case 'rn': await rn(args); break;
       case 'cp': await cp(args); break;
-      case 'rm': await rm(args, currentDirectory); break;
+      case 'rm': {
+        const pathToFile = args.join('');
+        await rm(pathToFile, currentDirectory);
+        stdout.write('File has been deleted\n');
+        break;
+      }
+      case 'mv': {
+        await mv(args);
+        stdout.write('File has been moved');
+        break;
+      }
     }
   } catch (e) {
     if (e.code === 'ENOENT') {
