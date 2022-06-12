@@ -1,7 +1,6 @@
 import { createWriteStream, createReadStream } from 'fs';
 import { access } from 'fs/promises';
 import { basename, sep } from 'path';
-import { stdout } from 'process';
 import {isExist} from "../utils/isExist.js";
 
 export const cp = async (args) => {
@@ -28,7 +27,6 @@ export const cp = async (args) => {
     const writeStream = createWriteStream(copyFilePath, {flags: 'w'});
 
     readStream.pipe(writeStream);
-    stdout.write('File has been copied\n');
 
   } catch (e) {
     throw (e);
