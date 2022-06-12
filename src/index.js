@@ -1,6 +1,6 @@
-import { argv } from 'process';
 import { stdin, stdout, exit } from 'process';
 import { homedir } from 'os';
+import { getUserName } from "./utils/getUserName.js";
 import * as readline from 'node:readline';
 import { up } from "./navigation/up.js";
 import { ls } from "./navigation/ls.js";
@@ -14,23 +14,10 @@ import { mv } from "./fs/mv.js";
 import { os } from "./os/os.js";
 import { getHash } from "./hash/hash.js";
 import { compress } from "./zlib/compress.js";
+import { decompress } from "./zlib/decompress.js";
 
-let userName = null;
+let userName = getUserName();
 let currentDirectory = homedir();
-
-export const getUserName = () => {
-  const nameVariable = '--username=';
-  const variable = argv.filter((item) => item.includes(nameVariable))[0];
-
-  if (variable && variable.length > nameVariable.length) {
-    return variable.slice(nameVariable.length);
-  } else {
-    throw new Error();
-  }
-};
-
-
-userName = getUserName();
 
 stdout.write(`Welcome to the File Manager, ${userName}! \nPlease enter command: \n\n`);
 
@@ -52,15 +39,11 @@ rl.on('line', async (data) => {
       }
 
       case 'up': {
-        currentDirectory = up(currentDirectory);
+        currentDirectory = up(args, currentDirectory);
         break;
       }
 
-      case 'ls': {
-        const list = await ls(currentDirectory);
-        console.log(list);
-        break;
-      }
+      case 'ls': await ls(args, currentDirectory); break;
 
       case 'cd': {
         const verifiedPath = await cd(args, currentDirectory);
@@ -70,7 +53,7 @@ rl.on('line', async (data) => {
 
       case 'cat': {
         const data = await cat(args);
-        stdout.write(data);
+        stdout.write(`${data}\n`);
         break;
       }
 
@@ -99,6 +82,11 @@ rl.on('line', async (data) => {
       case 'os': os(args); break;
       case 'hash': await getHash(args); break;
       case 'compress': await compress(args); break;
+      case 'decompress': {
+        const data = await decompress(args);
+        stdout.write(`${data}\n`);
+        break;
+      }
 
       default: throw new Error();
     }
@@ -114,6 +102,12 @@ rl.on('line', async (data) => {
     }
     else if (e.message === 'Incorrect command parameters') {
       stdout.write('\nOperation failed. Incorrect command parameters \n');
+    }
+    else if (e.message === 'Command must have one parameter') {
+      stdout.write('\nOperation failed. This command must have one parameter \n');
+    }
+    else if (e.message === 'Command must be without parameters') {
+      stdout.write('\nInvalid input. This command must be without parameters \n');
     }
     else {
       stdout.write('\nInvalid input \n', e.message);
