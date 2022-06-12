@@ -2,6 +2,11 @@ import { createReadStream } from 'fs';
 
 export const cat = async (args) => {
   return new Promise((resolve, reject) => {
+
+    if (args.length !== 1 ) {
+      throw new Error('Command must have one parameter');
+    }
+
     let inputPath = args.join(' ');
     const readStream = createReadStream(inputPath, {flags: 'r', encoding: 'utf8'});
 
