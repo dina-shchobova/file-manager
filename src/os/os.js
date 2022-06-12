@@ -7,8 +7,8 @@ import { getArchitectureInfo } from "./architecture.js";
 export const os = (args) => {
 
   try {
-    if (args.length > 1) {
-      throw new Error('Command must have one parameter');
+    if (args.length !== 1) {
+      throw new Error('This command takes one parameter');
     }
 
     switch (args[0]) {
@@ -17,11 +17,11 @@ export const os = (args) => {
       case '--homedir': getHomedir(); break;
       case '--username': getUsername(); break;
       case '--architecture': getArchitectureInfo(); break;
-      default: throw new Error();
+      default:
+        throw new Error('This command takes one of the parameters --EOL --cpus --homedir --username --architecture');
     }
 
   } catch (e) {
-    console.log(e.message);
     throw (e);
   }
 }

@@ -4,7 +4,7 @@ export const up = (args, currentPath) => {
   try {
 
     if (args.length !== 0 ) {
-      throw new Error('Сommand must be without parameters');
+      throw new Error('This command does not take any parameters');
     }
     return path.join(currentPath, '..');
 

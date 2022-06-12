@@ -4,7 +4,7 @@ import { isAbsolute, join } from 'path';
 export const rm = async (args, currentDirectory) => {
 
   if (args.length !== 1 ) {
-    throw new Error('Command must have one parameter');
+    throw new Error('This command takes one parameter');
   }
 
   let filePath = args.join();

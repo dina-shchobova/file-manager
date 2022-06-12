@@ -84,7 +84,7 @@ rl.on('line', async (data) => {
       }
 
       case 'os': os(args); break;
-      
+
       case 'hash': {
         await getHash(args);
         stdout.write(`\n`);
@@ -116,12 +116,7 @@ rl.on('line', async (data) => {
       || e.message === 'This command takes one of the parameters --EOL --cpus --homedir --username --architecture') {
       stdout.write(`\nInvalid input. ${e.message} \n`);
     }
-    // else if (e.message === 'This command takes one parameter') {
-    //   stdout.write(`\nInvalid input. ${e.message} \n`);
-    // }
-    // else if (e.message === 'This command does not take any parameters') {
-    //   stdout.write(`\nInvalid input. ${e.message} \n`);
-    // }
+
     else {
       stdout.write('\nInvalid input \n', e.message);
     }
