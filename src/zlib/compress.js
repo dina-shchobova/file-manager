@@ -9,7 +9,7 @@ export const compress = async (args) => {
 
   try {
     if (args.length !== 2 ) {
-      throw new Error('Incorrect command parameters');
+      throw new Error('This command takes two parameters');
     }
 
     const [filePath, pathToDestination] = args;
