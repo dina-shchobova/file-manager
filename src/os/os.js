@@ -8,7 +8,7 @@ export const os = (args) => {
 
   try {
     if (args.length > 1) {
-      throw new Error();
+      throw new Error('Command must have one parameter');
     }
 
     switch (args[0]) {
