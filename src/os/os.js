@@ -1,5 +1,6 @@
 import { getCpusInfo } from "./cpus.js";
 import { getEOL } from "./eol.js";
+import { getHomedir } from "./homedir.js";
 
 export const os = (args) => {
 
@@ -11,7 +12,7 @@ export const os = (args) => {
     switch (args[0]) {
       case '--EOL': getEOL(); break;
       case '--cpus': getCpusInfo(); break;
-      case '--homedir': break;
+      case '--homedir': getHomedir(); break;
       case '--username': break;
       case '---architecture': break;
       default: throw new Error();
