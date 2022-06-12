@@ -6,8 +6,23 @@ import { isExist } from "../utils/isExist.js";
 export const rn = async (args) => {
   try {
 
-    let [pathToFile, ...newName] = args;
-    const newPath = dirname(pathToFile) + sep + newName.join(' ');
+    if (args.length !== 2 ) {
+      throw new Error('This command takes two parameters');
+    }
+
+    let [pathToFile, newName] = args;
+
+    if (newName.includes('\\') ||
+      newName.includes('\/') ||
+      newName.includes('\:') ||
+      newName.includes('\*') ||
+      newName.includes('\<') ||
+      newName.includes('\>')
+    ) {
+      throw new Error('File name must not contain characters \\ \/ \: \* \< \>');
+    }
+
+    const newPath = dirname(pathToFile) + sep + newName;
 
     await access(pathToFile);
     const isNewPathExist = await isExist(newPath);
