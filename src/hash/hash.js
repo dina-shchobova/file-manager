@@ -6,7 +6,7 @@ export const getHash = async (args) => {
 
   try {
     if (args.length > 1) {
-      throw new Error()
+      throw new Error('Command must have one parameter')
     }
 
     return new Promise((resolve, reject) => {
