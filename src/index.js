@@ -67,8 +67,7 @@ rl.on('line', async (data) => {
       case 'cp': await cp(args); break;
 
       case 'rm': {
-        const pathToFile = args.join('');
-        await rm(pathToFile, currentDirectory);
+        await rm(args, currentDirectory);
         stdout.write('File has been deleted\n');
         break;
       }
@@ -104,10 +103,10 @@ rl.on('line', async (data) => {
       stdout.write('\nOperation failed. Incorrect command parameters \n');
     }
     else if (e.message === 'Command must have one parameter') {
-      stdout.write('\nOperation failed. This command must have one parameter \n');
+      stdout.write('\nOperation failed. This command takes one parameter \n');
     }
     else if (e.message === 'Command must be without parameters') {
-      stdout.write('\nInvalid input. This command must be without parameters \n');
+      stdout.write('\nInvalid input. This command does not take any parameters \n');
     }
     else {
       stdout.write('\nInvalid input \n', e.message);
