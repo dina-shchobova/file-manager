@@ -74,7 +74,7 @@ rl.on('line', async (data) => {
 
       case 'mv': {
         await mv(args);
-        stdout.write('File has been moved');
+        stdout.write('File has been moved\n');
         break;
       }
 
@@ -99,8 +99,8 @@ rl.on('line', async (data) => {
     else if (e.message === 'File already exists') {
       stdout.write('\nOperation failed. File already exists \n');
     }
-    else if (e.message === 'Incorrect command parameters') {
-      stdout.write('\nOperation failed. Incorrect command parameters \n');
+    else if (e.message === 'This command takes two parameters') {
+      stdout.write(`\nOperation failed. ${e.message} \n`);
     }
     else if (e.message === 'Command must have one parameter') {
       stdout.write('\nOperation failed. This command takes one parameter \n');
