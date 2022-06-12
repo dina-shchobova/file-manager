@@ -1,7 +1,13 @@
 import { access, rm as remove } from 'fs/promises';
 import { isAbsolute, join } from 'path';
 
-export const rm = async (filePath, currentDirectory) => {
+export const rm = async (args, currentDirectory) => {
+
+  if (args.length !== 1 ) {
+    throw new Error('Command must have one parameter');
+  }
+
+  let filePath = args.join();
 
   if (!isAbsolute(filePath)) {
     filePath = join(currentDirectory, filePath);
