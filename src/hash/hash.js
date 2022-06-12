@@ -5,8 +5,8 @@ import { stdout } from 'process';
 export const getHash = async (args) => {
 
   try {
-    if (args.length > 1) {
-      throw new Error('Command must have one parameter')
+    if (args.length !== 1) {
+      throw new Error('This command takes one parameter');
     }
 
     return new Promise((resolve, reject) => {

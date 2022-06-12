@@ -64,7 +64,12 @@ rl.on('line', async (data) => {
       }
 
       case 'rn': await rn(args); break;
-      case 'cp': await cp(args); break;
+
+      case 'cp': {
+        await cp(args);
+        stdout.write('File has been copied\n');
+        break;
+      }
 
       case 'rm': {
         await rm(args, currentDirectory);
@@ -79,7 +84,12 @@ rl.on('line', async (data) => {
       }
 
       case 'os': os(args); break;
-      case 'hash': await getHash(args); break;
+      
+      case 'hash': {
+        await getHash(args);
+        stdout.write(`\n`);
+        break;
+      }
       case 'compress': await compress(args); break;
       case 'decompress': {
         const data = await decompress(args);
@@ -97,17 +107,21 @@ rl.on('line', async (data) => {
       stdout.write('\nOperation failed. File already exists \n');
     }
     else if (e.message === 'File already exists') {
-      stdout.write('\nOperation failed. File already exists \n');
-    }
-    else if (e.message === 'This command takes two parameters') {
       stdout.write(`\nOperation failed. ${e.message} \n`);
     }
-    else if (e.message === 'Command must have one parameter') {
-      stdout.write('\nOperation failed. This command takes one parameter \n');
+    else if (e.message === 'This command takes two parameters'
+      || e.message === 'This command takes one parameter'
+      || e.message === 'This command does not take any parameters'
+      || e.message === 'File name must not contain characters \\ \/ \: \* \< \>'
+      || e.message === 'This command takes one of the parameters --EOL --cpus --homedir --username --architecture') {
+      stdout.write(`\nInvalid input. ${e.message} \n`);
     }
-    else if (e.message === 'Command must be without parameters') {
-      stdout.write('\nInvalid input. This command does not take any parameters \n');
-    }
+    // else if (e.message === 'This command takes one parameter') {
+    //   stdout.write(`\nInvalid input. ${e.message} \n`);
+    // }
+    // else if (e.message === 'This command does not take any parameters') {
+    //   stdout.write(`\nInvalid input. ${e.message} \n`);
+    // }
     else {
       stdout.write('\nInvalid input \n', e.message);
     }
